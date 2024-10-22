@@ -27,17 +27,17 @@ const CharacterSearch: React.FC = () => {
   }, [name, dispatch]);
 
   return (
-    <div className="border-2 border-white w-3/6 rounded-2xl">
-      <div className="flex  items-center flex-col p-6">
-        <h1 className="text-3xl self-start">Вселенная Рик и Морти</h1>
+    <div className="border-2 border-white w-3/6 rounded-2xl font-get-schwifty">
+      <div className="flex items-center flex-col p-6 ">
+        <h1 className="text-3xl self-start ">The universe of Rick and Morty</h1>
         <label className="flex flex-col w-full">
-          Имя персонажа
+          Character name
           <input
             type="text"
             value={name}
-            className="text-black "
+            className="text-black"
             onChange={e => setName(e.target.value)}
-            placeholder="Введите имя персонажа"
+            placeholder="Enter the character's name"
           />
         </label>
       </div>
@@ -48,14 +48,8 @@ const CharacterSearch: React.FC = () => {
       <ul>
         {characters.map(character => (
           <li key={character.id}>
-            <p className="">{character.name}</p>
-            <Image
-              className=""
-              src={character.image}
-              width={300}
-              height={300}
-              alt={character.name}
-            />
+            <p>{character.name}</p>
+            <Image src={character.image} width={300} height={300} alt={character.name} />
           </li>
         ))}
       </ul>

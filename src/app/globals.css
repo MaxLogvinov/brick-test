@@ -7,14 +7,21 @@
   --foreground: #ffffff;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+@font-face {
+  font-family: 'Get Schwifty';
+  src: url('./fonts/get_schwifty.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+body {
+  font-family: 'Get Schwifty', sans-serif;
+  color: var(--foreground);
+  background: var(--background);
 }

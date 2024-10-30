@@ -1,6 +1,7 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 
 const RickAndMortyFont = localFont({
   src: './fonts/get_schwifty.ttf',
@@ -20,7 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={RickAndMortyFont.variable}>
-      <body className="font-get-schwifty antialiased">{children}</body>
+      <body className="font-get-schwifty antialiased">
+        <AppRouterCacheProvider options={{ key: 'css' }}>{children}</AppRouterCacheProvider>
+      </body>
     </html>
   );
 }

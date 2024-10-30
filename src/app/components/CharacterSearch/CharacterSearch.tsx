@@ -3,7 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCharacters } from '../../servises/thunks/charactersThunk';
 import { RootState } from '../../servises/store';
 import Image from 'next/image';
-import type { AppDispatch } from '../../servises/store';
+import { AppDispatch } from '../../servises/store';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import { Avatar } from '@mui/material';
+import { inherits } from 'util';
 
 const DEBOUNCE_DELAY = 1000;
 
@@ -98,14 +103,45 @@ const CharacterSearch: React.FC = () => {
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
 
-      <ul>
+      <div>
+        {characters.map(character => (
+          <Accordion
+            className="bg-zinc-800 border-white text-inherit flex flex-col "
+            key={character.id}
+          >
+            <AccordionSummary
+              className="w-full flex justify-between items-center gap-5"
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: '100%'
+              }}
+            >
+              <div className="flex items-center gap-5">
+                <Avatar src={character.image} alt={character.name} className="w-14 h-14" />
+                <h3 className="px-4 text-xl">{character.name}</h3>
+              </div>
+              <div className="flex items-center justify-end gap-5">
+                <p className="pl-4 text-base">Gender: {character.gender}</p>
+                <p className="pl-4 text-base">Status: {character.status}</p>
+                <p className="pl-4 text-base">Species: {character.species}</p>
+              </div>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Image src={character.image} alt={character.name} width={300} height={300} />
+            </AccordionDetails>
+          </Accordion>
+        ))}
+      </div>
+      {/* <ul>
         {characters.map(character => (
           <li key={character.id}>
             <p>{character.name}</p>
             <Image src={character.image} width={300} height={300} alt={character.name} />
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 };

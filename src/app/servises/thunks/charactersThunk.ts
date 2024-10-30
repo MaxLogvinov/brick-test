@@ -13,6 +13,7 @@ export const fetchCharacters = createAsyncThunk<
         species ? `&species=${species}` : ''
       }`
     );
+    console.log(response.data);
     return response.data.results;
     //eslint-disable-next-line
   } catch (error: any) {

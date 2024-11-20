@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCharacters } from '../../servises/thunks/charactersThunk';
 import { RootState } from '../../servises/store';
-import Image from 'next/image';
 import { AppDispatch } from '../../servises/store';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { Avatar } from '@mui/material';
-import { inherits } from 'util';
+import Episodes from '../Episodes/Episodes';
+import { fetchEpisodes } from '@/app/servises/thunks/episodesThunk';
 
 const DEBOUNCE_DELAY = 1000;
+
+// ToDo: pagination, loading, если персонажи не найдены
 
 const CharacterSearch: React.FC = () => {
   const [name, setName] = useState('');
@@ -20,6 +22,7 @@ const CharacterSearch: React.FC = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const { characters, loading, error } = useSelector((state: RootState) => state.characters);
+  const { episodes } = useSelector((state: RootState) => state.episodes);
 
   // Отправка запроса с дебаунсом
   useEffect(() => {
@@ -40,6 +43,11 @@ const CharacterSearch: React.FC = () => {
     }
   }, [characters]);
 
+  // Загрузка эпизодов
+  useEffect(() => {
+    dispatch(fetchEpisodes());
+  }, [dispatch]);
+
   // Обработчик для сброса статуса
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value === 'reset' ? undefined : e.target.value;
@@ -56,7 +64,7 @@ const CharacterSearch: React.FC = () => {
 
   return (
     <div className="border-2 border-white w-3/6 rounded-2xl font-get-schwifty bg-inherit">
-      <div className="flex items-center flex-col p-6 gap-4 bg-inherit">
+      <div className="flex items-center rounded-2xl flex-col p-6 gap-4 bg-inherit">
         <h1 className="text-4xl self-start">The universe of Rick and Morty</h1>
         <label className="flex flex-col w-full">
           Character name
@@ -72,7 +80,7 @@ const CharacterSearch: React.FC = () => {
           <label className="flex flex-col w-full bg-inherit">
             Alive?
             <select
-              className="pl-1.5 rounded-lg bg-inherit border border-solid border-gray-300"
+              className="pl-1.5 rounded-lg bg-inherit border border-solid border-gray-300 cursor-pointer"
               value={status ?? 'reset'}
               onChange={handleStatusChange}
             >
@@ -85,7 +93,7 @@ const CharacterSearch: React.FC = () => {
           <label className="flex flex-col w-full bg-inherit">
             Species
             <select
-              className="pl-1.5 rounded-lg bg-inherit border border-solid border-gray-300"
+              className="pl-1.5 rounded-lg bg-inherit border border-solid border-gray-300 cursor-pointer"
               value={species ?? 'reset'}
               onChange={handleSpeciesChange}
             >
@@ -98,19 +106,26 @@ const CharacterSearch: React.FC = () => {
             </select>
           </label>
         </div>
+        <Accordion className="w-full bg-zinc-800 border-white text-inherit flex flex-col rounded-2xl">
+          <AccordionSummary>Episodes:</AccordionSummary>
+          <AccordionDetails>
+            {' '}
+            {episodes.length > 0 && <Episodes episodes={episodes} />}
+          </AccordionDetails>
+        </Accordion>
       </div>
 
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
 
-      <div>
+      <div className="py-1 px-0.5">
         {characters.map(character => (
           <Accordion
-            className="bg-zinc-800 border-white text-inherit flex flex-col "
+            className="bg-zinc-800 border-white text-inherit flex flex-col rounded-2xl"
             key={character.id}
           >
             <AccordionSummary
-              className="w-full flex justify-between items-center gap-5"
+              className="w-full flex justify-between items-center gap-5 rounded-2xl "
               sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -128,20 +143,19 @@ const CharacterSearch: React.FC = () => {
                 <p className="pl-4 text-base">Species: {character.species}</p>
               </div>
             </AccordionSummary>
-            <AccordionDetails>
-              <Image src={character.image} alt={character.name} width={300} height={300} />
+            <AccordionDetails className="rounded-2xl">
+              <ol className="list-decimal ml-5">
+                <p className="pb-2.5">Episodes:</p>
+                {character.episode.map(episodeUrl => (
+                  <li key={episodeUrl}>
+                    {episodes.find(ep => ep.url === episodeUrl)?.name || 'Loading...'}
+                  </li>
+                ))}
+              </ol>
             </AccordionDetails>
           </Accordion>
         ))}
       </div>
-      {/* <ul>
-        {characters.map(character => (
-          <li key={character.id}>
-            <p>{character.name}</p>
-            <Image src={character.image} width={300} height={300} alt={character.name} />
-          </li>
-        ))}
-      </ul> */}
     </div>
   );
 };

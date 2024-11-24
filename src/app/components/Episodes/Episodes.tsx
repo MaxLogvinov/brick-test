@@ -3,15 +3,9 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../servises/store';
-import { fetchCharacters } from '../../servises/thunks/charactersThunk';
-
-interface Episode {
-  id: number;
-  name: string;
-  air_date: string;
-  characters: string[];
-}
+import { AppDispatch } from '@/app/servises/store';
+import { fetchCharacters } from '@/app/servises/thunks/charactersThunk';
+import { Episode } from '@/app/types/types';
 
 interface EpisodesProps {
   episodes: Episode[];
@@ -20,11 +14,9 @@ interface EpisodesProps {
 const Episodes: React.FC<EpisodesProps> = ({ episodes }) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleEpisodeClick = (characters: string[]) => {
-    const characterIds = characters.map(url => url.split('/').pop()).join(',');
-    dispatch(
-      fetchCharacters({ name: '', status: undefined, species: undefined, episode: characterIds })
-    );
+  const handleEpisodeClick = (characterUrls: string[]) => {
+    const characterIds = characterUrls.map(url => url.split('/').pop()).join(',');
+    dispatch(fetchCharacters({ name: '', episode: characterIds }));
   };
 
   return (

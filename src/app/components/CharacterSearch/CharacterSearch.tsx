@@ -9,15 +9,17 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import { Avatar } from '@mui/material';
 import Episodes from '../Episodes/Episodes';
 import { fetchEpisodes } from '@/app/servises/thunks/episodesThunk';
+import { speciesOptions, statusOptions } from '@/app/utils/options';
+import { clearEpisodes } from '@/app/servises/slices/episodesSlice';
+import Loading from '../Loading/Loading';
 
 const DEBOUNCE_DELAY = 1000;
 
-// ToDo: pagination, loading, если персонажи не найдены
+// ToDo: pagination, localStorage, адаптив, номер серии
 
 const CharacterSearch: React.FC = () => {
   const [name, setName] = useState('');
   const [status, setStatus] = useState<string | undefined>(undefined);
-  const [speciesOptions, setSpeciesOptions] = useState<string[]>([]);
   const [species, setSpecies] = useState<string | undefined>(undefined);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -28,25 +30,19 @@ const CharacterSearch: React.FC = () => {
   useEffect(() => {
     const handler = setTimeout(() => {
       if (name.trim() || status || species) {
-        dispatch(fetchCharacters({ name, status, species: species }));
+        dispatch(fetchCharacters({ name, status, species })).then(action => {
+          if (fetchCharacters.fulfilled.match(action)) {
+            const allEpisodeUrls = action.payload.flatMap(character => character.episode);
+            dispatch(fetchEpisodes(Array.from(new Set(allEpisodeUrls))));
+          } else if (fetchCharacters.rejected.match(action)) {
+            dispatch(clearEpisodes());
+          }
+        });
       }
     }, DEBOUNCE_DELAY);
 
     return () => clearTimeout(handler);
   }, [name, status, species, dispatch]);
-
-  // Получение уникальных видов из данных
-  useEffect(() => {
-    if (characters.length > 0) {
-      const uniqueSpecies = Array.from(new Set(characters.map(character => character.species)));
-      setSpeciesOptions(uniqueSpecies);
-    }
-  }, [characters]);
-
-  // Загрузка эпизодов
-  useEffect(() => {
-    dispatch(fetchEpisodes());
-  }, [dispatch]);
 
   // Обработчик для сброса статуса
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -85,9 +81,11 @@ const CharacterSearch: React.FC = () => {
               onChange={handleStatusChange}
             >
               <option value="reset">select status / reset</option>
-              <option value="Alive">Alive</option>
-              <option value="Dead">Dead</option>
-              <option value="unknown">unknown</option>
+              {statusOptions.map(status => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
             </select>
           </label>
           <label className="flex flex-col w-full bg-inherit">
@@ -113,10 +111,8 @@ const CharacterSearch: React.FC = () => {
             {episodes.length > 0 && <Episodes episodes={episodes} />}
           </AccordionDetails>
         </Accordion>
+        {error && <p className="text-4xl">Error: Characters not found</p>}
       </div>
-
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
 
       <div className="py-1 px-0.5">
         {characters.map(character => (
@@ -156,6 +152,7 @@ const CharacterSearch: React.FC = () => {
           </Accordion>
         ))}
       </div>
+      {loading && <Loading />}
     </div>
   );
 };

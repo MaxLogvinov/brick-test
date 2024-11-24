@@ -2,12 +2,14 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { Episode } from '@/app/types/types';
 
-export const fetchEpisodes = createAsyncThunk<Episode[], void, { rejectValue: string }>(
+export const fetchEpisodes = createAsyncThunk<Episode[], string[], { rejectValue: string }>(
   'episodes/fetchEpisodes',
-  async (_, { rejectWithValue }) => {
+  async (episodeUrls, { rejectWithValue }) => {
     try {
-      const response = await axios.get('https://rickandmortyapi.com/api/episode');
-      return response.data.results;
+      const episodeIds = episodeUrls.map(url => url.split('/').pop()).join(',');
+      const response = await axios.get(`https://rickandmortyapi.com/api/episode/${episodeIds}`);
+      console.log(episodeIds);
+      return Array.isArray(response.data) ? response.data : [response.data];
       //eslint-disable-next-line
     } catch (error: any) {
       return rejectWithValue(error.message || 'Failed to fetch episodes');

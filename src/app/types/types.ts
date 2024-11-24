@@ -28,3 +28,7 @@ export interface EpisodeState {
   loading: boolean;
   error: string | null;
 }
+
+export interface EpisodesProps {
+  episodes: Episode[];
+}

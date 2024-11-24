@@ -9,11 +9,10 @@ export const fetchCharacters = createAsyncThunk<
 >('characters/fetchCharacters', async ({ name, status, species, episode }, { rejectWithValue }) => {
   try {
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/character?name=${name}${status ? `&status=${status}` : ''}${
-        species ? `&species=${species}` : ''
-      }${episode ? `&episode=${episode}` : ''}`
+      `https://rickandmortyapi.com/api/character?${name ? `name=${name}&` : ''}${
+        status ? `status=${status}&` : ''
+      }${species ? `species=${species}&` : ''}${episode ? `episode=${episode}` : ''}`
     );
-    console.log(response.data);
     return response.data.results;
     //eslint-disable-next-line
   } catch (error: any) {

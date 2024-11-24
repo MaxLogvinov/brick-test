@@ -11,7 +11,11 @@ const initialState: EpisodeState = {
 const episodeSlice = createSlice({
   name: 'episodes',
   initialState,
-  reducers: {},
+  reducers: {
+    clearEpisodes(state) {
+      state.episodes = [];
+    }
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchEpisodes.pending, state => {
@@ -29,4 +33,5 @@ const episodeSlice = createSlice({
   }
 });
 
+export const { clearEpisodes } = episodeSlice.actions;
 export default episodeSlice.reducer;

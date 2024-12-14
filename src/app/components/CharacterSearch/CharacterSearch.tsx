@@ -15,7 +15,7 @@ import Loading from '../Loading/Loading';
 
 const DEBOUNCE_DELAY = 1000;
 
-// ToDo: pagination, localStorage, адаптив, номер серии
+// ToDo: pagination, localStorage, адаптив
 
 const CharacterSearch: React.FC = () => {
   const [name, setName] = useState('');
@@ -107,7 +107,6 @@ const CharacterSearch: React.FC = () => {
         <Accordion className="w-full bg-zinc-800 border-white text-inherit flex flex-col rounded-2xl">
           <AccordionSummary>Episodes:</AccordionSummary>
           <AccordionDetails>
-            {' '}
             {episodes.length > 0 && <Episodes episodes={episodes} />}
           </AccordionDetails>
         </Accordion>
@@ -142,11 +141,20 @@ const CharacterSearch: React.FC = () => {
             <AccordionDetails className="rounded-2xl">
               <ol className="list-decimal ml-5">
                 <p className="pb-2.5">Episodes:</p>
-                {character.episode.map(episodeUrl => (
-                  <li key={episodeUrl}>
-                    {episodes.find(ep => ep.url === episodeUrl)?.name || 'Loading...'}
-                  </li>
-                ))}
+                {character.episode.map(episodeUrl => {
+                  const episode = episodes.find(ep => ep.url === episodeUrl);
+                  if (!episode) {
+                    return <li key={episodeUrl}>Loading...</li>;
+                  }
+                  // Извлекаем номер сезона и эпизода из поля episode
+                  const [series, episodeNumber] = episode.episode.slice(1).split('E');
+                  const formattedText = `Series: ${series}, Episode: ${episodeNumber}`;
+                  return (
+                    <li key={episodeUrl}>
+                      {formattedText} - {episode.name}
+                    </li>
+                  );
+                })}
               </ol>
             </AccordionDetails>
           </Accordion>

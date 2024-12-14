@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { CharacterState } from '@/app/types/types';
-import { fetchCharacters } from '../thunks/charactersThunk';
-import { clearEpisodes } from './episodesSlice';
+import { fetchCharacters, fetchCharactersByUrls } from '../thunks/charactersThunk';
 
 const initialState: CharacterState = {
   characters: [],
@@ -27,7 +26,19 @@ const characterSlice = createSlice({
         state.loading = false;
         state.error = action.payload || 'Failed to fetch characters';
         state.characters = [];
-        clearEpisodes();
+      })
+      .addCase(fetchCharactersByUrls.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCharactersByUrls.fulfilled, (state, action) => {
+        state.loading = false;
+        state.characters = action.payload;
+      })
+      .addCase(fetchCharactersByUrls.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to fetch characters';
+        state.characters = [];
       });
   }
 });

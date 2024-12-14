@@ -4,7 +4,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/app/servises/store';
-import { fetchCharacters } from '@/app/servises/thunks/charactersThunk';
+import { fetchCharactersByUrls } from '@/app/servises/thunks/charactersThunk';
 import { Episode } from '@/app/types/types';
 
 interface EpisodesProps {
@@ -15,8 +15,7 @@ const Episodes: React.FC<EpisodesProps> = ({ episodes }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleEpisodeClick = (characterUrls: string[]) => {
-    const characterIds = characterUrls.map(url => url.split('/').pop()).join(',');
-    dispatch(fetchCharacters({ name: '', episode: characterIds }));
+    dispatch(fetchCharactersByUrls(characterUrls));
   };
 
   return (

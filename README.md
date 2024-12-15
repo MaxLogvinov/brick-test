@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Приложение для поиска персонажей во вселенной "Рик и Морти"
 
-## Getting Started
+Данный проект представляет собой веб-приложение для поиска персонажей из вселенной "Рик и Морти", разработанное с использованием Next.js, Redux Toolkit и Tailwind CSS. Приложение использует Rick and Morty API для получения данных о персонажах и предоставляет функциональность фильтрации и сортировки данных.
 
-First, run the development server:
+## Технологии и библиотеки
 
-```bash
+- **React**: библиотека для создания пользовательских интерфейсов.
+- **Next.js**: фреймворк для серверного рендеринга и построения React-приложений.
+- **TypeScript**: язык программирования с поддержкой статической типизации.
+- **Tailwind CSS**: утилитарный CSS-фреймворк для стилизации.
+- **MUI (Material-UI)**: библиотека компонентов для создания UI.
+- **Redux Toolkit**: инструмент для работы с глобальным состоянием и асинхронными действиями.
+- **Rick and Morty API**: источник данных о персонажах, эпизодах и локациях.
+
+## Функциональность
+
+1. **Поиск персонажей** по заданным критериям.
+2. **Фильтрация данных:**:
+   - По статусу (Alive, Dead, Unknown).
+   - По виду (Species).
+3. **Сортировка данных** по имени персонажа.
+4. **Пагинация** для удобной навигации по результатам.
+5. **Отображение детальной информации о персонаже**, включая:
+   - Имя
+   - Пол
+   - Статус
+   - Вид
+   - Аватар
+
+## Установка и запуск проекта
+
+1. Клонируйте репозиторий:
+   ```bash
+   git clone https://github.com/MaxLogvinov/brick-test.git
+   cd brick-test
+   ```
+2. Установите зависимости:
+   ```sh
+   npm install
+   # или
+   yarn install
+   ```
+
+### Запуск приложения
+
+Для запуска сервера разработки выполните:
+
+```sh
 npm run dev
-# or
+# или
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Приложение будет доступно по адресу http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Деплой на Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**[Ссылка на сайт](https://brick-test-liard.vercel.app/)**
 
-## Learn More
+#### Задача
 
-To learn more about Next.js, take a look at the following resources:
+Проект реализует тестовое задание для собеседования на позицию Frontend-разработчика:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Использован Rick and Morty API для получения данных о персонажах.
+Реализована фильтрация, сортировка и пагинация данных.
+Использованы современные технологии: Next.js, Redux Toolkit, Tailwind CSS и TypeScript.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+#### Возможные улучшения
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Добавить фильтрацию по локациям.
+Реализовать возможность сохранения избранных персонажей.
+Добавить тестирование компонентов с использованием Jest и React Testing Library.

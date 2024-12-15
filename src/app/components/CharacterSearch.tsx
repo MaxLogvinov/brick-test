@@ -109,7 +109,7 @@ const CharacterSearch: React.FC = () => {
             {episodes.length > 0 && <Episodes episodes={episodes} />}
           </AccordionDetails>
         </Accordion>
-        {error && <p className="text-4xl">Error: Characters not found</p>}
+        {error && <p className="text-4xl max-sm:text-base">Error: Characters not found</p>}
       </div>
       <CharacterAccordion />
       {loading && <Loading />}

@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/app/servises/store';
 import { fetchCharactersByUrls } from '@/app/servises/thunks/charactersThunk';
 import { Episode } from '@/app/types/types';
+import { setName, setSpecies, setStatus } from '../servises/slices/characterSlice';
 
 interface EpisodesProps {
   episodes: Episode[];
@@ -16,6 +17,9 @@ const Episodes: React.FC<EpisodesProps> = ({ episodes }) => {
 
   const handleEpisodeClick = (characterUrls: string[]) => {
     dispatch(fetchCharactersByUrls(characterUrls));
+    dispatch(setName(''));
+    dispatch(setSpecies(''));
+    dispatch(setStatus(''));
   };
 
   return (

@@ -21,29 +21,32 @@ const CharacterAccordion: React.FC = () => {
   };
 
   return (
-    <div className="py-1 px-0.5 bg-inherit text-inherit flex flex-col items-center">
+    <div className="py-1 px-0.5 bg-inherit text-inherit flex flex-col items-center mb-3">
       {characters.map(character => (
         <Accordion
           className="bg-zinc-800 w-full border-white text-inherit flex flex-col rounded-2xl"
           key={character.id}
         >
           <AccordionSummary
-            className="w-full flex justify-between items-center gap-5 rounded-2xl "
             sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: '100%'
+              '&.MuiAccordionSummary-root': {
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                justifyContent: 'center'
+              }
             }}
+            className="w-full flex items-center"
           >
-            <div className="flex items-center gap-5">
-              <Avatar src={character.image} alt={character.name} className="w-14 h-14" />
-              <h3 className="px-4 text-xl">{character.name}</h3>
-            </div>
-            <div className="flex items-center justify-end gap-5">
-              <p className="pl-4 text-base">Gender: {character.gender}</p>
-              <p className="pl-4 text-base">Status: {character.status}</p>
-              <p className="pl-4 text-base">Species: {character.species}</p>
+            <div className=" flex justify-center items-center gap-5 rounded-2xl  max-sm:flex-col max-sm:justify-center max-sm:self-center max-sm:gap-1">
+              <div className="flex items-center gap-5 max-sm:gap-1">
+                <Avatar src={character.image} alt={character.name} className="w-14 h-14" />
+                <h3 className="px-4 text-xl max-sm:text-base">{character.name}</h3>
+              </div>
+              <div className="flex items-center justify-end gap-5 max-sm:gap-1 max-sm:flex-col  max-sm:justify-center">
+                <p className="pl-4 text-base max-sm:text-sm">Gender: {character.gender}</p>
+                <p className="pl-4 text-base max-sm:text-sm">Status: {character.status}</p>
+                <p className="pl-4 text-base max-sm:text-sm">Species: {character.species}</p>
+              </div>
             </div>
           </AccordionSummary>
           <AccordionDetails className="rounded-2xl">

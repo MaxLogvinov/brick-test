@@ -17,8 +17,6 @@ import { setName, setSpecies, setStatus } from '../servises/slices/characterSlic
 
 const DEBOUNCE_DELAY = 1000;
 
-// ToDo:  localStorage, адаптив
-
 const CharacterSearch: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { characters, loading, error, name, status, species } = useSelector(
@@ -60,9 +58,9 @@ const CharacterSearch: React.FC = () => {
   console.log(characters);
 
   return (
-    <div className="border-2 border-white w-3/6 rounded-2xl font-get-schwifty bg-inherit text-inherit">
+    <div className="border-2 border-white sm:w-11/12 md:w-10/12 lg:w-8/12 xl:w-6/12 rounded-2xl font-get-schwifty bg-inherit text-inherit mt-3">
       <div className="flex items-center rounded-2xl flex-col p-6 gap-4 bg-inherit ">
-        <h1 className="text-4xl self-start">The universe of Rick and Morty</h1>
+        <h1 className=" sm:text-2xl lg:text-3xl xl:text-4xl">The universe of Rick and Morty</h1>
         <label className="flex flex-col w-full">
           Character name
           <input
@@ -73,7 +71,7 @@ const CharacterSearch: React.FC = () => {
             placeholder="Enter the character's name"
           />
         </label>
-        <div className="flex items-center justify-between w-full gap-8 bg-inherit">
+        <div className="flex items-center justify-between w-full gap-8 bg-inherit max-sm:flex-col">
           <label className="flex flex-col w-full bg-inherit">
             Alive?
             <select

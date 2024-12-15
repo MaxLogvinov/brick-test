@@ -3,27 +3,33 @@ import axios from 'axios';
 import { Character } from '@/app/types/types';
 
 export const fetchCharacters = createAsyncThunk<
-  Character[],
-  { name: string; status?: string; species?: string; episode?: string },
+  {
+    results: Character[];
+    info: { count: number; pages: number; next: string | null; prev: string | null };
+  },
+  { name: string; status?: string; species?: string; episode?: string; page?: number },
   { rejectValue: string }
->('characters/fetchCharacters', async ({ name, status, species, episode }, { rejectWithValue }) => {
-  try {
-    const params = new URLSearchParams();
-    if (name) params.append('name', name);
-    if (status) params.append('status', status);
-    if (species) params.append('species', species);
-    if (episode) params.append('episode', episode);
+>(
+  'characters/fetchCharacters',
+  async ({ name, status, species, episode, page }, { rejectWithValue }) => {
+    try {
+      const params = new URLSearchParams();
+      if (name) params.append('name', name);
+      if (status) params.append('status', status);
+      if (species) params.append('species', species);
+      if (episode) params.append('episode', episode);
+      if (page) params.append('page', page.toString());
 
-    const response = await axios.get(
-      `https://rickandmortyapi.com/api/character?${params.toString()}`
-    );
-    console.log(response.data);
-    return response.data.results;
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Failed to fetch characters';
-    return rejectWithValue(message);
+      const response = await axios.get(
+        `https://rickandmortyapi.com/api/character?${params.toString()}`
+      );
+      return response.data;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to fetch characters';
+      return rejectWithValue(message);
+    }
   }
-});
+);
 
 export const fetchCharactersByUrls = createAsyncThunk<
   Character[],

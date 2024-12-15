@@ -2,14 +2,23 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { Avatar } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../servises/store';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import { fetchCharacters } from '../servises/thunks/charactersThunk';
+import { AppDispatch } from '../servises/store';
 
 const CharacterAccordion: React.FC = () => {
-  const { characters } = useSelector((state: RootState) => state.characters);
+  const { characters, info, name, status, species } = useSelector(
+    (state: RootState) => state.characters
+  );
   const { episodes } = useSelector((state: RootState) => state.episodes);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    dispatch(fetchCharacters({ name, status, species, page }));
+  };
 
   return (
     <div className="py-1 px-0.5 bg-inherit text-inherit flex flex-col items-center">
@@ -71,7 +80,7 @@ const CharacterAccordion: React.FC = () => {
           }
         }}
       >
-        <Pagination count={20} />
+        <Pagination count={info.pages} onChange={handlePageChange} color="primary" />
       </Stack>
     </div>
   );

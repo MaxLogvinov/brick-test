@@ -10,8 +10,12 @@ export interface Character {
 
 export interface CharacterState {
   characters: Character[];
+  info: { count: number; pages: number; next: string | null; prev: string | null };
   loading: boolean;
   error: string | null;
+  name: string;
+  species: string | undefined;
+  status: string | undefined;
 }
 
 export interface Episode {

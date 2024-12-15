@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCharacters } from '../servises/thunks/charactersThunk';
 import { RootState } from '../servises/store';
@@ -12,18 +12,18 @@ import { speciesOptions, statusOptions } from '@/app/utils/options';
 import { clearEpisodes } from '@/app/servises/slices/episodesSlice';
 import Loading from './Loading';
 import CharacterAccordion from './CharacterAccordion';
+import { Character } from '../types/types';
+import { setName, setSpecies, setStatus } from '../servises/slices/characterSlice';
 
 const DEBOUNCE_DELAY = 1000;
 
-// ToDo: pagination, localStorage, адаптив
+// ToDo:  localStorage, адаптив
 
 const CharacterSearch: React.FC = () => {
-  const [name, setName] = useState('');
-  const [status, setStatus] = useState<string | undefined>(undefined);
-  const [species, setSpecies] = useState<string | undefined>(undefined);
-
   const dispatch = useDispatch<AppDispatch>();
-  const { characters, loading, error } = useSelector((state: RootState) => state.characters);
+  const { characters, loading, error, name, status, species } = useSelector(
+    (state: RootState) => state.characters
+  );
   const { episodes } = useSelector((state: RootState) => state.episodes);
 
   // Отправка запроса с дебаунсом
@@ -32,7 +32,8 @@ const CharacterSearch: React.FC = () => {
       if (name.trim() || status || species) {
         dispatch(fetchCharacters({ name, status, species })).then(action => {
           if (fetchCharacters.fulfilled.match(action)) {
-            const allEpisodeUrls = action.payload.flatMap(character => character.episode);
+            const { results } = action.payload;
+            const allEpisodeUrls = results.flatMap((character: Character) => character.episode);
             dispatch(fetchEpisodes(Array.from(new Set(allEpisodeUrls))));
           } else if (fetchCharacters.rejected.match(action)) {
             dispatch(clearEpisodes());
@@ -47,13 +48,13 @@ const CharacterSearch: React.FC = () => {
   // Обработчик для сброса статуса
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value === 'reset' ? undefined : e.target.value;
-    setStatus(value);
+    dispatch(setStatus(value));
   };
 
   // Обработчик для сброса вида
   const handleSpeciesChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value === 'reset' ? undefined : e.target.value;
-    setSpecies(value);
+    dispatch(setSpecies(value));
   };
 
   console.log(characters);
@@ -68,7 +69,7 @@ const CharacterSearch: React.FC = () => {
             type="text"
             value={name}
             className="pl-1.5 rounded-lg bg-inherit border border-solid border-gray-300"
-            onChange={e => setName(e.target.value)}
+            onChange={e => dispatch(setName(e.target.value))}
             placeholder="Enter the character's name"
           />
         </label>

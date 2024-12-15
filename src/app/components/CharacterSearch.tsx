@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCharacters } from '../../servises/thunks/charactersThunk';
-import { RootState } from '../../servises/store';
-import { AppDispatch } from '../../servises/store';
+import { fetchCharacters } from '../servises/thunks/charactersThunk';
+import { RootState } from '../servises/store';
+import { AppDispatch } from '../servises/store';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import { Avatar } from '@mui/material';
-import Episodes from '../Episodes/Episodes';
+import Episodes from './Episodes';
 import { fetchEpisodes } from '@/app/servises/thunks/episodesThunk';
 import { speciesOptions, statusOptions } from '@/app/utils/options';
 import { clearEpisodes } from '@/app/servises/slices/episodesSlice';
-import Loading from '../Loading/Loading';
+import Loading from './Loading';
+import CharacterAccordion from './CharacterAccordion';
 
 const DEBOUNCE_DELAY = 1000;
 
@@ -59,8 +59,8 @@ const CharacterSearch: React.FC = () => {
   console.log(characters);
 
   return (
-    <div className="border-2 border-white w-3/6 rounded-2xl font-get-schwifty bg-inherit">
-      <div className="flex items-center rounded-2xl flex-col p-6 gap-4 bg-inherit">
+    <div className="border-2 border-white w-3/6 rounded-2xl font-get-schwifty bg-inherit text-inherit">
+      <div className="flex items-center rounded-2xl flex-col p-6 gap-4 bg-inherit ">
         <h1 className="text-4xl self-start">The universe of Rick and Morty</h1>
         <label className="flex flex-col w-full">
           Character name
@@ -112,54 +112,7 @@ const CharacterSearch: React.FC = () => {
         </Accordion>
         {error && <p className="text-4xl">Error: Characters not found</p>}
       </div>
-
-      <div className="py-1 px-0.5">
-        {characters.map(character => (
-          <Accordion
-            className="bg-zinc-800 border-white text-inherit flex flex-col rounded-2xl"
-            key={character.id}
-          >
-            <AccordionSummary
-              className="w-full flex justify-between items-center gap-5 rounded-2xl "
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                width: '100%'
-              }}
-            >
-              <div className="flex items-center gap-5">
-                <Avatar src={character.image} alt={character.name} className="w-14 h-14" />
-                <h3 className="px-4 text-xl">{character.name}</h3>
-              </div>
-              <div className="flex items-center justify-end gap-5">
-                <p className="pl-4 text-base">Gender: {character.gender}</p>
-                <p className="pl-4 text-base">Status: {character.status}</p>
-                <p className="pl-4 text-base">Species: {character.species}</p>
-              </div>
-            </AccordionSummary>
-            <AccordionDetails className="rounded-2xl">
-              <ol className="list-decimal ml-5">
-                <p className="pb-2.5">Episodes:</p>
-                {character.episode.map(episodeUrl => {
-                  const episode = episodes.find(ep => ep.url === episodeUrl);
-                  if (!episode) {
-                    return <li key={episodeUrl}>Loading...</li>;
-                  }
-                  // Извлекаем номер сезона и эпизода из поля episode
-                  const [series, episodeNumber] = episode.episode.slice(1).split('E');
-                  const formattedText = `Series: ${series}, Episode: ${episodeNumber}`;
-                  return (
-                    <li key={episodeUrl}>
-                      {formattedText} - {episode.name}
-                    </li>
-                  );
-                })}
-              </ol>
-            </AccordionDetails>
-          </Accordion>
-        ))}
-      </div>
+      <CharacterAccordion />
       {loading && <Loading />}
     </div>
   );

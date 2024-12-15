@@ -1,6 +1,6 @@
 'use client';
 
-import CharacterSearch from './components/CharacterSearch/CharacterSearch';
+import CharacterSearch from './components/CharacterSearch';
 import { Provider } from 'react-redux';
 import { store } from '../app/servises/store';
 import { CacheProvider } from '@emotion/react';

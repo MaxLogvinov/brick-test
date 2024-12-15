@@ -17,6 +17,7 @@ export const fetchCharacters = createAsyncThunk<
     const response = await axios.get(
       `https://rickandmortyapi.com/api/character?${params.toString()}`
     );
+    console.log(response.data);
     return response.data.results;
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed to fetch characters';

@@ -26,17 +26,15 @@ const CharacterAccordion: React.FC = () => {
         <Accordion
           className="bg-zinc-800 w-full border-white text-inherit flex flex-col rounded-2xl"
           key={character.id}
+          sx={{
+            '@media (max-width: 599px)': {
+              maxWidth: '90vw',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }
+          }}
         >
-          <AccordionSummary
-            sx={{
-              '&.MuiAccordionSummary-root': {
-                display: 'flex',
-                flexDirection: { xs: 'column', sm: 'row' },
-                justifyContent: 'center'
-              }
-            }}
-            className="w-full flex items-center"
-          >
+          <AccordionSummary className="w-full flex items-center max-sm:justify-center max-sm:flex-col">
             <div className=" flex justify-center items-center gap-5 rounded-2xl  max-sm:flex-col max-sm:justify-center max-sm:self-center max-sm:gap-1">
               <div className="flex items-center gap-5 max-sm:gap-1">
                 <Avatar src={character.image} alt={character.name} className="w-14 h-14" />
@@ -57,7 +55,6 @@ const CharacterAccordion: React.FC = () => {
                 if (!episode) {
                   return <li key={episodeUrl}>Loading...</li>;
                 }
-                // Извлекаем номер сезона и эпизода из поля episode
                 const [series, episodeNumber] = episode.episode.slice(1).split('E');
                 const formattedText = `Series: ${series}, Episode: ${episodeNumber}`;
                 return (
